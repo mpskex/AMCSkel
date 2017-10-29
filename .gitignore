@@ -1,3 +1,6 @@
 #   Ignore AMC Files
 *.amc
 *.asf
+
+#   Ignore Mat File
+*.mat

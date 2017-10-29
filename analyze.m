@@ -1,25 +1,22 @@
-%   Analyzing the mocap dataset
-%   Liu Fangrui
-%   Beijing University
-root_name = './subjects';
-subjects = dir(strcat(root_name));
-amc_mat_list = [];
+amc_mat_list = load('amc_mat_list.mat', 'amc_mat_list');
+amc_mat_list = amc_mat_list.amc_mat_list;
 
-for i = 1 : length(subjects)
-    if( isequal( subjects(i).name, '.' )||...
-        isequal( subjects(i).name, '..')||...
-        ~subjects(i).isdir) 
-        continue;
-    else
-        amc_objs = dir([root_name '/' subjects(i).name '/*.amc' ]);
-        sub_list = []
-        for j = 1:length(amc_objs)
-            if( isequal( amc_objs(j).name, '.DS_Store' )||...
-                ~amc_objs(j).isdir) 
-                disp([root_name '/' subjects(i).name '/' amc_objs(j).name]);
-                D = amc_to_matrix([root_name '/' subjects(i).name '/' amc_objs(j).name]);
-           end
-        end
-        amc_mat_list = [amc_mat_list; D];
-    end
+V = [];
+for i = 1:size(amc_mat_list, 2)
+    V(i) = var(amc_mat_list(:, i)');
 end
+
+%   Sampling
+randind = randperm(size(amc_mat_list, 1), 7000);
+Field = amc_mat_list(randind(1:length(randind)),:);
+
+%   Correlationship
+C = ones(size(Field, 2), size(Field, 2));
+for i = 1:size(Field, 2)
+    C(:,i) = C(:,i) - abs(corr(Field, Field(:,i)));
+end
+Y = squareform(pdist(C));
+Z = linkage(Y, 'complete');
+H = dendrogram(Z, 62);
+T = cluster(Z,  'cutoff', 62);
+%scatter3(Z(:,1), Z(:,2), Z(:,3));

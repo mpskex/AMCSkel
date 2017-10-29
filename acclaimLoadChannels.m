@@ -32,6 +32,9 @@ while lin~=-1
   if length(parts)==1
     frameNo = str2num(parts{1});
     if ~isempty(frameNo)
+      if mod(counter, 100) == 0
+        disp(sprintf('%8d is read!', counter));
+      end
       counter = counter + 1;
       if counter ~= frameNo
         error('Unexpected frame number.');
@@ -48,6 +51,7 @@ while lin~=-1
   lin = fgetl(fid);
 end
 fclose(fid);
+disp(sprintf('Total %8d is read!', counter));
 numFrames = counter;
 numChannels = 0;
 for i = 1:length(skel.tree)

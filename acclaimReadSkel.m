@@ -27,10 +27,11 @@ skel.angle = 'deg';
 skel.type = 'acclaim';
 skel.documentation = '';
 skel.name = fileName;
+count = 0;
 while ~feof(fid)
   if lin(1)=='#'
     % if it is comment
-    lin = fgetl(fid)
+    lin = fgetl(fid);
     continue
   end
   if lin(1)==':'
