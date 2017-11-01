@@ -1,4 +1,3 @@
-
 %   Analyzing the mocap dataset
 %   Liu Fangrui
 %   Beijing University
@@ -29,7 +28,7 @@ parfor i = 1 : length(subjects)
                 % out = channels;
                 out = Angle2XYZ(channels, skel);
             end
-           amc_mat_list = [amc_mat_list; out];
+            amc_mat_list = [amc_mat_list; 1];
         end
     end
 end
